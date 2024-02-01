@@ -34,8 +34,8 @@ public class Page extends VerticalLayout{
         btn1.addClickListener(event -> PreformCrossOver());
         Button btn2 = new Button("print tournamentSelection");
         btn2.addClickListener(event -> PreformtournamentSelection("יא"));
-        Button btn3 = new Button("print SomeSome");
-        btn3.addClickListener(event -> SomeSome());
+        Button btn3 = new Button("print Genetic Algo");
+        btn3.addClickListener(event -> PerformGeneticAlgorithm());
         Button btn4 = new Button("Prefotm mutate");
         btn4.addClickListener(event -> PerformMutate());
         //// TODO add more checks to Evaluate
@@ -159,7 +159,7 @@ public class Page extends VerticalLayout{
         return indices;
     }
 
-    private void SomeSome()
+    private void PerformGeneticAlgorithm()
     {
         School testSchool  = CreateSchool();
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
