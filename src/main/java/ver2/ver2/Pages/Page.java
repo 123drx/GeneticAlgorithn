@@ -34,10 +34,11 @@ public class Page extends VerticalLayout{
         btn1.addClickListener(event -> PreformCrossOver());
         Button btn2 = new Button("print tournamentSelection");
         btn2.addClickListener(event -> PreformtournamentSelection("יא"));
-        Button btn3 = new Button("print Genetic Algo");
-        btn3.addClickListener(event -> PerformGeneticAlgorithm());
-        Button btn4 = new Button("Prefotm mutate");
-        btn4.addClickListener(event -> PerformMutate());
+        Button btn3 = new Button("Prefotm mutate");
+        btn3.addClickListener(event -> PerformMutate());
+        Button btn4 = new Button("print Genetic Algo");
+        btn4.addClickListener(event -> PerformGeneticAlgorithm());
+        
         //// TODO add more checks to Evaluate
         //Button btn5 = new Button("CheckEvaluate");
         //btn5.addClickListener(event -> CheckEvaluate());
@@ -291,7 +292,7 @@ public class Page extends VerticalLayout{
         c0s4.setWeaklyHours(6);
         class1.addSubject(c0s4);
 
-        Subject c0s5 = new Subject(trabelsy.getSubjects().get(1));
+        Subject c0s5 = new Subject(trabelsy.getSubjects().get(0));
         c0s5.setTeacherName(trabelsy.getName());
         c0s5.setWeaklyHours(6);
         class1.addSubject(c0s5);

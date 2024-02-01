@@ -18,7 +18,7 @@ public class GeneticAlgorithm {
       private static final int POPULATION_SIZE = 200;
     private static final int MAX_GENERATIONS = 500;
     private static double MUTATION_RATE = 0.66;
-    private static double BIGMUTATION_RATE = 0.33;  
+    private static double BIGMUTATION_RATE = 0.4;  
 
    
 

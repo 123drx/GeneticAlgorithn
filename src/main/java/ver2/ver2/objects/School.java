@@ -267,10 +267,10 @@ public class School {
             if (Streak == 0)
                 value -= 8;
             // if (Streak == 1)
-            //     value += 5;
+            // value += 5;
             // if (Streak == 2)
-            //     value += 3;
-             if (Streak == 3)
+            // value += 3;
+            if (Streak == 3)
                 value -= 5;
             if (Streak > 3)
                 value -= (Streak * 4);
@@ -291,14 +291,32 @@ public class School {
             if (distance < 0) {
                 value += (distance * 15);
             }
-            if(distance == 0)
-            {
+            if (distance == 0) {
                 value += 10;
             }
         }
-        //TODO count for every week how many Empty lessons are there
+        for (int i = 0; i < Schedule.MaxDays; i++) {
+            int countthatweek = countweeklyEmptys(className, i);
+            if (countthatweek > 3) {
+                value -= 10;
+            }
+        }
 
         return value;
+    }
+
+    public int countweeklyEmptys(String ClassName, int day) {
+        int count = 0;
+        SchoolClass sc = getClass(ClassName);
+        Schedule schedule = sc.getSchedule();
+        for (int i = 0; i < Schedule.MaxHours; i++) {
+            if (i != Schedule.LunchHour - Schedule.StartingHour) {
+                if (schedule.getSchedule()[day][i].GetLesson().equals("Empty")) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     public void printEvaluation(String ClassName) {
@@ -320,18 +338,17 @@ public class School {
 
         List<Integer> Distances = EvalWeeklyHours(ClassName);
 
-        String s = "========================================================================================================"+"\n";
+        String s = "========================================================================================================"
+                + "\n";
 
         s += "Evaluation for Class : " + ClassName + "\n";
         s += "Empty Classes Mid Schedule : " + MidEmptys + "\n";
         s += "Streaks : " + "\n";
-        for (int  i = 0 ; i < Streaks.size() ; i++) {
-            if(Streaks.get(i) >= 0)
-            { 
+        for (int i = 0; i < Streaks.size(); i++) {
+            if (Streaks.get(i) >= 0) {
                 s += Streaks.get(i) + " , ";
-            }
-            else{
-                s+= "\n";
+            } else {
+                s += "\n";
             }
         }
         s += "\n";
@@ -339,43 +356,39 @@ public class School {
         s += "\n" + "Hour Mismutches : " + hourmismutchs + "\n";
         s += " Distances : " + "\n";
         s += "(";
-        for (int i = 0 ; i < Distances.size();i++) {
-            s+= subjects.get(i).getSubjectName();
-            s+= " ";
+        for (int i = 0; i < Distances.size(); i++) {
+            s += subjects.get(i).getSubjectName();
+            s += " ";
             s += Distances.get(i) + ",";
         }
         s += ")";
-        s+= "\n hours we have : \n";
-        for(Subject subj : subjects)
-        {
+        s += "\n hours we have : \n";
+        for (Subject subj : subjects) {
             int classweeklyhours = schedule.CountWeeklyHours(subj.getSubjectName());
             s += subj.getSubjectName();
             s += " - " + classweeklyhours + "\t";
         }
-        s+= "\n hours we need : \n";
-        for(Subject subj : subjects)
-        {
+        s += "\n hours we need : \n";
+        for (Subject subj : subjects) {
             s += subj.getSubjectName();
             s += " - " + subj.getWeaklyHours() + "\t";
         }
         s += "\nToatal School Classes : " + (Schedule.MaxDays * Schedule.MaxHours);
-        s+= "Total School Teacher needed hours "+ countClassNeededHours(ClassName); 
-        s+= "\n";
+        s += "Total School Teacher needed hours " + countClassNeededHours(ClassName);
+        s += "\n";
         s += "========================================================================================================";
-        // TODO  add a print for the teachers with how many hours they work a week with all there subject
+        // TODO add a print for the teachers with how many hours they work a week with
+        // all there subject
         // weekly hours combined(the time they should work a week)
         System.out.println(s);
 
     }
 
-    public int countClassNeededHours(String ClassName)
-    {
+    public int countClassNeededHours(String ClassName) {
         int count = 0;
         SchoolClass sc = this.getClass(ClassName);
-        for(Subject s : sc.getSubjects())
-        {
-            if(!s.getSubjectName().equals("Empty"))
-            {
+        for (Subject s : sc.getSubjects()) {
+            if (!s.getSubjectName().equals("Empty")) {
                 count += s.getWeaklyHours();
             }
         }
@@ -480,9 +493,7 @@ public class School {
                                         }
                                     }
                             }
-                        }
-                        else 
-                        {
+                        } else {
                             list.add(streak);
                             streak = 0;
                             if (hour == Schedule.MaxHours - 1) {
