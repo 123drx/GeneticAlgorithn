@@ -298,7 +298,7 @@ public class School {
         for (int i = 0; i < Schedule.MaxDays; i++) {
             int countthatweek = countweeklyEmptys(className, i);
             if (countthatweek > 3) {
-                value -= 10;
+                value -= 5;
             }
         }
 

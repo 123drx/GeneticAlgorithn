@@ -34,9 +34,9 @@ public class GeneticAlgorithm {
         // Evolution
         for (int generation = 1; generation <= MAX_GENERATIONS; generation++) {
             // Evaluate fitness
-            List<Integer> Evaluations = new ArrayList<>();
+            List<Integer> Fitnesses = new ArrayList<>();
             for (School scl : population) {
-                Evaluations.add(scl.evaluateSchoolClass(ClassName));
+                Fitnesses.add(scl.evaluateSchoolClass(ClassName));
             }
 
             List<School> newPopulation = new ArrayList<>();
@@ -44,13 +44,13 @@ public class GeneticAlgorithm {
             // Tournament selection for parents
             for (int i = 0; i < POPULATION_SIZE; i++) {
                 if (i < (90 * (POPULATION_SIZE / 100))) {
-                    SortedIndexes = getSortedIndexes(Evaluations);
+                    SortedIndexes = getSortedIndexes(Fitnesses);
                     School parent1 =new School();
-                    parent1.tournamentSelection(population, Evaluations,SortedIndexes);
+                    parent1.tournamentSelection(population, Fitnesses,SortedIndexes);
                     School parent2 = new School();
-                    parent2.tournamentSelection(population, Evaluations,SortedIndexes);
+                    parent2.tournamentSelection(population, Fitnesses,SortedIndexes);
                     while (parent2.equals(parent1)) {
-                        parent2.tournamentSelection(population, Evaluations,SortedIndexes);
+                        parent2.tournamentSelection(population, Fitnesses,SortedIndexes);
                     }
 
                     // Perform crossover and mutation to generate new population
@@ -128,9 +128,9 @@ public class GeneticAlgorithm {
             population = newPopulation;
 
             // Output best schedule in this generation
-            int bestIndex = Evaluations.indexOf(Collections.max(Evaluations));
+            int bestIndex = Fitnesses.indexOf(Collections.max(Fitnesses));
             // population.get(bestIndex).printSchedule();
-            System.out.println("Generation " + generation + ": Best Fitness : " + Evaluations.get(bestIndex)+ "\t"+"diaversity : "+calculateDiversity(Evaluations));
+            System.out.println("Generation " + generation + ": Best Fitness : " + Fitnesses.get(bestIndex)+ "\t"+"diaversity : "+calculateDiversity(Fitnesses));
             // System.out.println("Generation " + generation + ": Best Fitness : " + Evaluations.get(bestIndex)+" Mutation Rate " + MUTATION_RATE+" SuperMutation Rate : "+SUPERMUTATION_RATE + "DIaversity : "+calculateDiversity(Evaluations));
             // population.get(bestIndex).printScheduleteachers();
         }
@@ -139,7 +139,7 @@ public class GeneticAlgorithm {
         int bestIndex = evaluateBestScheduleIndex(population, ClassName);
         population.get(bestIndex).printSChool();
         int v = population.get(bestIndex).evaluateSchoolClass(ClassName);
-        System.out.println("Evaluation ; " + v);
+        System.out.println("Fittnes ; " + v);
         System.out.println("Mutation R" + MUTATION_RATE);
         System.out.println("SuperMutation R"+BIGMUTATION_RATE);
         return population.get(bestIndex);
