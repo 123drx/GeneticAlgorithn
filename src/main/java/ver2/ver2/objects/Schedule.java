@@ -164,7 +164,7 @@ public class Schedule {
                     s.setTeacher(randomsubject.getTeacherName());
 
                     s.setStartHour(j + StartingHour);
-                    s.setEndHour(j + StartingHour);
+                    s.setDay(i);
                     this.SetLesson(i, j, s);
                 }
             }
@@ -186,7 +186,7 @@ public class Schedule {
                     s.setTeacher(randomsubject.getTeacherName());
 
                     s.setStartHour(j + StartingHour);
-                    s.setEndHour(j + StartingHour);
+                    s.setDay(i);
                     schd.SetLesson(i, j, s);
                 }
             }
@@ -375,7 +375,7 @@ public class Schedule {
        }
        Lesson ss = this.getSchedule()[randDay][randHour];
        NewLesson.setStartHour(ss.getStartHour());
-       NewLesson.setEndHour(ss.getEndHour());
+       NewLesson.setDay(ss.getDay());
        mutated.Schedual[randDay][randHour] = NewLesson;
        //System.out.println("Replaced (day :"+(randDay+1)+",Hour "+(randHour+StartingHour)+")");
        return mutated;
@@ -385,7 +385,7 @@ public class Schedule {
         Schedule mutated = new Schedule(this);
         Random random = new Random();
         //Get a Rundom Subject
-        for(int i = 0 ; i < 3 ;i++)
+        for(int i = 0 ; i < 2 ;i++)
        {Subject s  = subjects.get(random.nextInt(subjects.size()));
        //Create the lesson the Mutated is gonna get
        Lesson NewLesson = new Lesson();
@@ -409,7 +409,7 @@ public class Schedule {
        }
        Lesson ss = this.getSchedule()[randDay][randHour];
        NewLesson.setStartHour(ss.getStartHour());
-       NewLesson.setEndHour(ss.getEndHour());
+       NewLesson.setDay(ss.getDay());
        mutated.Schedual[randDay][randHour] = NewLesson;
        //System.out.println("Replaced (day :"+(randDay+1)+",Hour "+(randHour+StartingHour)+")");
     }

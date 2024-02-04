@@ -5,26 +5,40 @@ public class Lesson {
     private String LessonSubject;
     private String Teacher;
     private int StartHour;
-    private int EndHour;
+    private int day;
+    private boolean IsLocked;
 
-    public Lesson(String LessonSubject,String Teacher,int StartHour,int EndHour)
-    {
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public boolean isIsLocked() {
+        return IsLocked;
+    }
+
+    public void setIsLocked(boolean isLocked) {
+        IsLocked = isLocked;
+    }
+
+    public Lesson(String LessonSubject, String Teacher, int StartHour, int Day) {
         this.LessonSubject = LessonSubject;
         this.Teacher = Teacher;
         this.StartHour = StartHour;
-        this.EndHour = EndHour;
+        this.day = Day;
     }
 
-    public Lesson(Lesson lesson)
-    {
+    public Lesson(Lesson lesson) {
         this.LessonSubject = lesson.getLessonSubject();
         this.Teacher = lesson.getTeacher();
         this.StartHour = lesson.getStartHour();
-        this.EndHour = lesson.getEndHour();
+        this.day = lesson.getDay();
     }
 
-    public Lesson()
-    {
+    public Lesson() {
 
     }
 
@@ -52,35 +66,22 @@ public class Lesson {
         StartHour = startHour;
     }
 
-    public int getEndHour() {
-        return EndHour;
-    }
-
-    public void setEndHour(int endHour) {
-        EndHour = endHour;
-    }
-    
-    public String GetLesson()
-    {
-        String s ;
-        s = ""+LessonSubject +" "+ Teacher;
+    public String GetLesson() {
+        String s;
+        s = "" + LessonSubject + " " + Teacher;
         return s;
     }
-    
-    public void PrintLesson()
-    {
-        String s ;
-        s = ""+LessonSubject +" "+ Teacher;
+
+    public void PrintLesson() {
+        String s;
+        s = "" + LessonSubject + " " + Teacher;
         System.out.println(s);
     }
- 
-    public String PrintHours()
-    {
-        String s; 
-        s = StartHour + " - " + EndHour;
+
+    public String PrintHours() {
+        String s;
+        s = "Day : " + day + " hour : " + StartHour +"\t"; 
         return s;
     }
-
-
 
 }

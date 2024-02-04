@@ -70,185 +70,36 @@ public class School {
 
     }
 
-    public int evaluateSchool() {
-        int totalScore = 0;
-        // Set<String> assignedTeachers = new HashSet<>(); // To track assigned teachers
-        // across all classes
-        // go throw all classes in school
-        for (SchoolClass schoolClass : this.getClasses()) {
-            Schedule classSchedule = schoolClass.getSchedule();
-            List<Teacher> teachers = this.getTeachers(schoolClass.getTeachers());
-            List<Subject> Subjects = schoolClass.getSubjects();
-            Map<String, Integer> teacherCountMap = new HashMap<>();
-            int streak = 0;
-
-            for (int day = 0; day < Schedule.MaxDays; day++) {
-                int count = 0;
-
-                for (int hour = 0; hour < Schedule.MaxHours; hour++) {
-                    if (hour == (Schedule.LunchHour - Schedule.StartingHour)) {
-                        continue;
-                    }
-
-                    Lesson lesson = classSchedule.getSchedule()[day][hour];
-
-                    if (lesson != null) {
-                        Teacher teacher = findTeacher(teachers, lesson.getTeacher());
-
-                        if (teacher != null) {
-                            if (hour > 0) {
-                                if (classSchedule.getSchedule()[day][hour - 1] != null) {
-                                    if (lesson.getTeacher() == classSchedule.getSchedule()[day][hour - 1]
-                                            .getTeacher()) {
-                                        streak++;
-                                    } else {
-                                        if (streak == 1)
-                                            totalScore += 10;
-                                        if (streak == 2)
-                                            totalScore += 5;
-                                        if (streak == 3)
-                                            totalScore -= 15;
-                                        if (streak > 3) {
-                                            totalScore -= (streak + 1) * 6;
-                                            streak = 0;
-                                        }
-                                    }
-                                }
-                            }
-
-                            int elapses = this.CountElapces(teacher, day, hour);
-                            totalScore += elapses * 100;
-
-                            // Check if the lesson's hour is within teacher's preferred hours
-                            boolean isPreferredHour = teacher.getHourPrefrences()[day][hour];
-
-                            // Check if the lesson is within teacher's day constraints
-                            boolean isDayAvailable = teacher.getDayConstrains()[day];
-
-                            // Count occurrences of the same teacher on the same day
-                            count = teacherCountMap.getOrDefault(teacher.getName(), 0);
-                            count++;
-                            teacherCountMap.put(teacher.getName(), count);
-
-                            if (isDayAvailable) {
-                                totalScore += 25;
-                            } else {
-                                totalScore -= 50;
-                            }
-                            if (isPreferredHour) {
-                                totalScore += 30; // Add a positive score for meeting preferences
-                            } else {
-                                totalScore -= 50;
-                            }
-                        }
-                    }
-                }
-            }
-            for (Subject sbj : Subjects) {
-                int sbjcount = schoolClass.getSchedule().CountWeeklyHours(sbj.getSubjectName());
-                int valuateby = sbj.getWeaklyHours() - sbjcount;
-                if (valuateby > 0 || valuateby < 0) {
-                    totalScore -= valuateby * 100;
-                } else {
-                    totalScore += 200;
-                }
-            }
-        }
-
-        return totalScore;
-    }
-
-    // public int evaluateSchoolClass(String className) {
-    // int totalScore = 0;
-    // int PunishDay = 0;
-    // int PunishHour = 0;
-    // for (SchoolClass schoolClass : this.getClasses()) {
-    // // check if that the class we eanted to check
-    // if (schoolClass.getClassName() != className) {
-    // // if that not the class we wanted then we serch the other classes
-    // continue;
-    // }
-    // Schedule classSchedule = schoolClass.getSchedule();
-    // List<Teacher> teachers = getTeachers(schoolClass.getTeachers());
-    // List<Subject> Subjects = schoolClass.getSubjects();
-    // Map<String, Integer> teacherCountMap = new HashMap<>();
-    // int streak = 0;
-    // for (int day = 0; day < Schedule.MaxDays; day++) {
-    // int count = 0;
-    // for (int hour = 0; hour < Schedule.MaxHours; hour++) {
-    // if (hour == (Schedule.LunchHour - Schedule.StartingHour)) {
-    // // break if on lunch
-    // continue;
-    // }
-    // Lesson lesson = classSchedule.getSchedule()[day][hour];
-    // if (lesson != null) {
-    // Teacher teacher = findTeacher(teachers, lesson.getTeacher());
-    // if (teacher != null) {
-    // if (hour > 0) {
-    // // checking the teacher streak;
-    // if (classSchedule.getSchedule()[day][hour - 1] != null) {
-    // if (lesson.getTeacher() == classSchedule.getSchedule()[day][hour - 1]
-    // .getTeacher()) {
-    // streak++;
-    // } else {
-    // if (streak == 0)
-    // totalScore -= 10;
-    // if (streak == 1)
-    // totalScore += 10;
-    // if (streak == 2)
-    // totalScore += 5;
-    // if (streak == 3)
-    // totalScore -= 15;
-    // if (streak > 3) {
-    // totalScore -= (streak + 1) * 6;
-    // streak = 0;
-    // }
-    // }
-    // }
-    // }
-    // int elapses = this.CountElapces(teacher, day, hour);
-    // totalScore -= elapses * 50;
-    // // Check if the lesson's hour is within teacher's preferred hours
-    // boolean isPreferredHour = teacher.getHourPrefrences()[day][hour];
-    // // Check if the lesson is within teacher's day constraints
-    // boolean isDayAvailable = teacher.getDayConstrains()[day];
-    // // Count occurrences of the same teacher on the same day
-    // count = teacherCountMap.getOrDefault(teacher.getName(), 0);
-    // count++;
-    // teacherCountMap.put(teacher.getName(), count);
-    // if (!isDayAvailable) {
-    // PunishDay++;
-    // } else if (!isPreferredHour) {
-    // PunishHour++;
-    // }
-    // }
-    // }
-    // }
-    // }
-    // for (Subject sbj : Subjects) {
-    // if (sbj.getSubjectName().equals("Empty")) {
-    // int WeeklyHours = calculateEmptyHoursNeeded(className);
-    // sbj.setWeaklyHours(WeeklyHours);
-    // }
-    // int sbjcount =
-    // schoolClass.getSchedule().CountWeeklyHours(sbj.getSubjectName());
-    // int Distance = sbj.getWeaklyHours() - sbjcount;
-    // if (Distance > 0 || Distance < 0) {
-    // totalScore -= Distance * 50;
-    // }
-    // }
-    // totalScore -= PunishDay * 40;
-    // totalScore -= PunishHour * 30;
-    // }
-    // return totalScore;
-    // }
-
     public void addEmptySubjects() {
         for (SchoolClass s : this.getClasses()) {
             if (!s.isSubjectExist("Empty")) {
                 s.addEmptySubject();
             }
         }
+    }
+
+    public int countweaklyapearance(int day)
+    {
+        int count =0;
+//TODO finish
+        return count;
+    }
+
+    public int evaluateTeacherClassDieversity(String ClassName)
+    {
+        int Eval =0;
+        List<Teacher> Teacherss = getTeachers(getClass(ClassName).getTeachers());
+        for(Teacher t : Teacherss)
+        {
+            for(int Day = 0 ; Day < Schedule.MaxHours ; Day++)
+            {
+                if(t.getDayConstrains()[Day] = true)
+                {
+                    //TODO Finish
+                }
+            }
+        }
+        return Eval;
     }
 
     public int evaluateSchoolClass(String className) {
@@ -262,14 +113,15 @@ public class School {
 
         List<Integer> Distances = EvalWeeklyHours(className);
 
+        int LockedLessonsBreaks = CountLockedBreaks(className);
+
+        value -= (LockedLessonsBreaks * 50);
+
+
         // valuate the streaks
         for (int Streak : Streaks) {
             if (Streak == 0)
                 value -= 8;
-            // if (Streak == 1)
-            // value += 5;
-            // if (Streak == 2)
-            // value += 3;
             if (Streak == 3)
                 value -= 5;
             if (Streak > 3)
@@ -281,6 +133,7 @@ public class School {
         value -= (hourmismutchs * 45);
 
         // Remove Points if a empty class in the middle of the schedule
+
         value -= (MidEmptys * 10);
 
         // -10 points if a subjects was more or less time then the weekly hours
@@ -303,6 +156,23 @@ public class School {
         }
 
         return value;
+    }
+
+    public int CountLockedBreaks(String ClassName)
+    {
+        SchoolClass sc = getClass(ClassName);
+        int count = 0 ;    
+        for(Lesson s : this.getClass(ClassName).getLockedLessons())
+        {
+            int Day = s.getDay();
+            int hour = s.getStartHour()-Schedule.StartingHour;
+            if(sc.getSchedule().getSchedule()[Day][hour].getLessonSubject().equals(s.getLessonSubject()))
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     public int countweeklyEmptys(String ClassName, int day) {
@@ -376,8 +246,31 @@ public class School {
         s += "\nToatal School Classes : " + (Schedule.MaxDays * Schedule.MaxHours);
         s += "Total School Teacher needed hours " + countClassNeededHours(ClassName);
         s += "\n";
+        s += "========================================================================================================"+"\n";
+        List<Teacher> teacherList = new ArrayList<>();
+        teacherList = this.getTeachers();
+        s += "===============================================Changed========================================================="+"\n";
+
+        for(Teacher t : teacherList)
+        {
+            int i = 0;
+            Constrains[] constrains = t.getConstrains();
+            s += t.getName() +" : \t\n";
+            for(Constrains conn : constrains)
+            {
+                i++;
+                if(conn == null)
+                {
+                    s+= "Day " + i +" Cant Work"+"\n";
+                }
+                else{
+                    s+= "Day " + i +"\t"+ "Start : "+conn.getStartHour() +"\t" + "End : "+conn.getEndHour() +"total hours : " +(conn.getEndHour()-conn.getStartHour())+"\n";
+                }
+            }
+            
+        }
+        s += "\n";
         s += "========================================================================================================";
-        // TODO add a print for the teachers with how many hours they work a week with
         // all there subject
         // weekly hours combined(the time they should work a week)
         System.out.println(s);
@@ -395,7 +288,6 @@ public class School {
         return count;
     }
 
-    // TODO mkae the mutate work on diffrent sujects not teachers
     public List<Integer> EvalWeeklyHours(String ClassName) {
         List<Integer> Distances = new ArrayList<>();
         SchoolClass sc = getClass(ClassName);
@@ -415,21 +307,27 @@ public class School {
 
     public int CountEmptyClassInMidSchrdule(String ClassName) {
         int count = 0;
+        int index = 0;
         SchoolClass sc = getClass(ClassName);
         if (sc != null) {
             Schedule schedule = sc.getSchedule();
             for (int day = 0; day < Schedule.MaxDays; day++) {
 
                 for (int hour = 0; hour < Schedule.MaxHours; hour++) {
-                    if (schedule.getSchedule()[day][hour].getLessonSubject().equals("Empty")) {
-                        if (!(hour == Schedule.MaxHours - 1)) {
-                            if (!schedule.getSchedule()[day][hour + 1].getLessonSubject().equals("Empty")) {
-                                count++;
-                            }
-                        }
+                    if (!schedule.getSchedule()[day][hour].getLessonSubject().equals("Empty")) {
+                       index = hour;
                     }
                 }
             }
+            for (int day = 0; day < Schedule.MaxDays; day++) {
+
+                for (int hour = 0; hour < index; hour++) {
+                    if (schedule.getSchedule()[day][hour].getLessonSubject().equals("Empty")) {
+                        count++;
+                    }
+                }
+            }
+
 
         }
         return count;

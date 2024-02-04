@@ -15,18 +15,22 @@ import ver2.ver2.objects.Subject;
 
 public class GeneticAlgorithm {
     
-      private static final int POPULATION_SIZE = 200;
-    private static final int MAX_GENERATIONS = 500;
-    private static double MUTATION_RATE = 0.66;
-    private static double BIGMUTATION_RATE = 0.4;  
+    private static final int POPULATION_SIZE = 250;
+    private static int MAX_GENERATIONS = 400;
+    private static double MUTATION_RATE = 0.55;
+    private static double BIGMUTATION_RATE = 0.17;  
+    private int CrossOverPrecent = 75; //what precentage of the population will crossover
 
-   
+   // TODO add a lock for a class lesson with a lesson 
+   // TODO add that if a teacher teaches 2 classes in 2 days he 
+   // TODO wont see all each classes in each day but seperatad and exe...
 
     
     
     
    
     public School Geneticalgorithm(School school , String ClassName) {
+        int count = 0;
         //adds empty subject for every class
         school.addEmptySubjects();
         List<School> population = initializePopulationByClass(school,ClassName);
@@ -43,7 +47,7 @@ public class GeneticAlgorithm {
 
             // Tournament selection for parents
             for (int i = 0; i < POPULATION_SIZE; i++) {
-                if (i < (90 * (POPULATION_SIZE / 100))) {
+                if (i < (CrossOverPrecent * (POPULATION_SIZE / 100))) {
                     SortedIndexes = getSortedIndexes(Fitnesses);
                     School parent1 =new School();
                     parent1.tournamentSelection(population, Fitnesses,SortedIndexes);
@@ -99,7 +103,7 @@ public class GeneticAlgorithm {
                 } 
                 else {
 
-                    int in = i % (90 * (POPULATION_SIZE / 100));
+                    int in = i % (CrossOverPrecent * (POPULATION_SIZE / 100));
                     newPopulation.add(population.get(SortedIndexes.get(in)));
 
                 }
@@ -126,11 +130,21 @@ public class GeneticAlgorithm {
 
             // Replace old population with new population
             population = newPopulation;
+           
 
             // Output best schedule in this generation
             int bestIndex = Fitnesses.indexOf(Collections.max(Fitnesses));
+            if(generation == MAX_GENERATIONS)
+            {
+                if( Fitnesses.get(bestIndex) <= 70 && count < 100)
+                {
+                    MAX_GENERATIONS +=1;
+                    count += 1;
+
+                }
+            }
             // population.get(bestIndex).printSchedule();
-            System.out.println("Generation " + generation + ": Best Fitness : " + Fitnesses.get(bestIndex)+ "\t"+"diaversity : "+calculateDiversity(Fitnesses));
+            System.out.println("Generation " + generation + ": Best Fitness : " + Fitnesses.get(bestIndex)+ "\t"+"diaversity : "+calculateDiversity(Fitnesses) +  "Avrage Fitnnes : "+claculateavragefittnes(Fitnesses));
             // System.out.println("Generation " + generation + ": Best Fitness : " + Evaluations.get(bestIndex)+" Mutation Rate " + MUTATION_RATE+" SuperMutation Rate : "+SUPERMUTATION_RATE + "DIaversity : "+calculateDiversity(Evaluations));
             // population.get(bestIndex).printScheduleteachers();
         }
@@ -159,7 +173,19 @@ public class GeneticAlgorithm {
         return indices;
     }
 
-    public static int calculateDiversity(List<Integer> list) {
+    public int claculateavragefittnes(List<Integer> fitnesses)
+    {
+        int avrage = 0;
+        for(int value : fitnesses)
+        {
+            avrage += value;
+        }
+        avrage = avrage / fitnesses.size();
+        //TODO finish:
+        return avrage;
+    }
+
+    public int calculateDiversity(List<Integer> list) {
         // Use a Set to automatically eliminate duplicates
         Set<Integer> uniqueElements = new HashSet<>(list);
         

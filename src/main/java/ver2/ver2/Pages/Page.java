@@ -15,6 +15,7 @@ import com.vaadin.flow.router.Route;
 
 import ver2.ver2.Algorithms.GeneticAlgorithm;
 import ver2.ver2.objects.Constrains;
+import ver2.ver2.objects.Lesson;
 import ver2.ver2.objects.Schedule;
 import ver2.ver2.objects.School;
 import ver2.ver2.objects.SchoolClass;
@@ -39,10 +40,8 @@ public class Page extends VerticalLayout{
         Button btn4 = new Button("print Genetic Algo");
         btn4.addClickListener(event -> PerformGeneticAlgorithm());
         
-        //// TODO add more checks to Evaluate
         //Button btn5 = new Button("CheckEvaluate");
         //btn5.addClickListener(event -> CheckEvaluate());
-        //// TODO add more checks to GeneticAlgorithm
         //Button btn6 = new Button("ChecckgeneticAlgo");
         //btn6.addClickListener(event -> ChecckgeneticAlgo());
         // add list of theacher with prefereces and enable next lines
@@ -196,6 +195,15 @@ public class Page extends VerticalLayout{
         Guy.setSubjects(subjects);
         RetSchool.addTeacher(Guy);
 
+        Teacher kodesh = new Teacher("Harab le Kodesh");
+        Constrains[] KodeshConsts = new Constrains[Schedule.MaxDays];
+        List<String> Kodeshsubjects = new ArrayList<>();
+        KodeshConsts[3] = new Constrains(12,14);
+        kodesh.setConstrains(KodeshConsts);
+        Kodeshsubjects.add("Kodesh");
+        kodesh.setSubjects(Kodeshsubjects);
+        RetSchool.addTeacher(kodesh);
+
         Teacher ilan = new Teacher("ilan");
         Constrains[] ilanConsts = new Constrains[Schedule.MaxDays];
         List<String> ilansubjects = new ArrayList<>();
@@ -316,7 +324,13 @@ public class Page extends VerticalLayout{
         c0s9.setTeacherName(Yaniv.getName());
         c0s9.setWeaklyHours(3);
         class1.addSubject(c0s9);
+
+        Subject c0s10 = new Subject(kodesh.getSubjects().get(0));//class 0 subject 0 
+        c0s10.setTeacherName(kodesh.getName());
+        c0s10.setWeaklyHours(2);        
+        class1.addSubject(c0s10);
         class1.initSchedule();
+
 
 
         //add the class to the scool
@@ -373,6 +387,8 @@ public class Page extends VerticalLayout{
 
         //add the secend class to the school
         RetSchool.addclass(class2);
+        Lesson s = new Lesson(Daniel.getSubjects().get(0),Daniel.getName(),12,3);
+        RetSchool.getClass("יא").addLockedLesson(null);
 
         //System.out.println("Created this Schedule");
         //RetSchool.printSChool();

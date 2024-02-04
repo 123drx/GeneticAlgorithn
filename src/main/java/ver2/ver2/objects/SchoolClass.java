@@ -7,8 +7,13 @@ public class SchoolClass {
     private Schedule Schedule;
     private List<Subject> subjects = new ArrayList<>();
     private List<String> Teachers = new ArrayList<>();
+    private List<Lesson> LockedLessons= new ArrayList<>();
     
 
+    public void addLockedLesson(Lesson lesson)
+    {
+        this.LockedLessons.add(lesson);
+    }
 
     public SchoolClass()
     {
@@ -141,6 +146,14 @@ public class SchoolClass {
 
     public void setTeachers(List<String> teachers) {
         Teachers = teachers;
+    }
+
+    public List<Lesson> getLockedLessons() {
+        return LockedLessons;
+    }
+
+    public void setLockedLessons(List<Lesson> lockedLessons) {
+        LockedLessons = lockedLessons;
     }
     
 }

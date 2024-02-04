@@ -17,7 +17,7 @@ public class Teacher {
     private boolean[][] HourPrefrences = new boolean[MaxDays][MaxHours];
     private boolean[] DayConstrains = new boolean[MaxDays];
     private List<String> Subjects = new ArrayList<>();
-    
+
     private static final Map<Integer, String> daysOfWeekMap = new HashMap<>();
     static {
         daysOfWeekMap.put(0, "Sunday");
@@ -29,7 +29,7 @@ public class Teacher {
 
     public Teacher(Teacher otherTeacher) {
         this.Name = otherTeacher.Name;
-        
+
         // Deep copy for HourPreferences
         for (int i = 0; i < MaxDays; i++) {
             System.arraycopy(otherTeacher.getHourPrefrences()[i], 0, this.getHourPrefrences()[i], 0, MaxHours);
@@ -40,6 +40,33 @@ public class Teacher {
 
         // Copy Subjects (assuming it's just a list of names, so a shallow copy is fine)
         this.Subjects = new ArrayList<>(otherTeacher.Subjects);
+    }
+
+    public Constrains[] getConstrains() {
+        int starthour = 0;
+        int EndHour = 0;
+        Constrains[] consts = new Constrains[Schedule.MaxDays];
+        for (int day = 0; day < Schedule.MaxDays; day++) {
+            boolean bol = false;
+            if (this.getDayConstrains()[day] == true) {
+                for (int hour = 0; hour < Schedule.MaxHours; hour++) {
+                    if (this.getHourPrefrences()[day][hour] == true && bol==false) {
+                        bol = true;
+                        starthour = hour;
+
+                    } else if(this.getHourPrefrences()[day][hour] == false) {
+                        if (bol == true) {
+                            EndHour = hour;
+                            consts[day] = new Constrains(starthour, EndHour);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                consts[day] = null;
+            }
+        }
+        return consts;
     }
 
     public void printSubjects() {
@@ -94,13 +121,14 @@ public class Teacher {
                 }
             } else {
                 this.DayConstrains[i] = true;
-                for (int j = constrains[i].getStartHour() - StartingHour; j < constrains[i].getEndHour()- StartingHour; j++) {
+                for (int j = constrains[i].getStartHour() - StartingHour; j < constrains[i].getEndHour()
+                        - StartingHour; j++) {
                     HourPrefrences[i][j] = true;
                 }
             }
         }
     }
-   
+
     public void setConstrains1(Constrains[] constrains) {
         for (int i = 0; i < MaxDays; i++) {
             if (constrains[i] == null) {
@@ -110,20 +138,17 @@ public class Teacher {
                 }
             } else {
                 this.DayConstrains[i] = true;
-                for (int j = constrains[i].getStartHour() ; j <= constrains[i].getEndHour(); j++) {
+                for (int j = constrains[i].getStartHour(); j <= constrains[i].getEndHour(); j++) {
                     HourPrefrences[i][j] = true;
                 }
             }
         }
     }
 
-    public int getdistancefromhour(int day)
-    {
-        int retint = 0; 
-        for(int hour = 0 ; hour < this.MaxHours ; hour++)
-        {
-            if(this.getHourPrefrences()[day][hour])
-            {
+    public int getdistancefromhour(int day) {
+        int retint = 0;
+        for (int hour = 0; hour < this.MaxHours; hour++) {
+            if (this.getHourPrefrences()[day][hour]) {
 
             }
         }
